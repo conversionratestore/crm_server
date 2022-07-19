@@ -1,0 +1,6 @@
+{
+  "port": 4000,
+  "mongoUri": "mongodb+srv://admin_crs:Ialxp0BWxAaG8YZ8@crm-system.gbfgb.mongodb.net/crm_crs?retryWrites=true&w=majority",
+  "salt": 12,
+  "keyjwt": "rateStore"
+}
