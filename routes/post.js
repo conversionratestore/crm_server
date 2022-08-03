@@ -1,8 +1,7 @@
 const {Router} = require('express')
 const router = Router()
-const verify = require('../middleware/check-auth')
 
-router.get('/', verify, (req, res) => {
+router.get('/', (req, res) => {
     res.json({message: "Secret data"})
 })
 

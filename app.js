@@ -1,6 +1,7 @@
 const express = require('express')
 const config = require('config')
 const app = express()
+const verify = require('./middleware/check-auth')
 
 app.use(express.json())
 
@@ -14,14 +15,18 @@ app.use((req, res, next) => {
     }
     next()
 })
-
+// global routs
 app.use('/auth', require('./routes/auth'))
-app.use('/post', require('./routes/post'))
-app.use('/users', require('./routes/users'))
-
 app.get('/', function (req, res) {
     res.status(200).send(`<h1>CRM API</h1>`);
 });
+
+//private routs
+app.use(verify)
+app.use('/post', require('./routes/post'))
+app.use('/users', require('./routes/users'))
+app.use('/clients', require('./routes/clients'))
+app.use('/bugs', require('./routes/bugs'))
 
 app.use((err, req, res, next) => {
     res.status(500).json({ss: "error", msg: err.message, err})

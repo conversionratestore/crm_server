@@ -14,7 +14,6 @@ router.post('/registration',
     async (req, res, next) => {
     try {
         const errors = validationResult(req)
-        console.log(req)
         if (!errors.isEmpty()) {
             return res.status(400).json({validation_error: errors.array()})
         }
@@ -27,9 +26,9 @@ router.post('/registration',
         if(newUser) {
             const hashedPassword = await bcrypt.hash(pwd, config.get("salt"))
             const user = (await db.query(`INSERT INTO users(email, password) VALUES (?) ;`, [[email, hashedPassword]]))[0]
-            res.status(201).json({ss: "success", msg: "User created"})
+            res.status(201).json({status: "success", message: "User created"})
         } else  {
-            res.status(401).json({ss:"error", msg: "User with this email already created"})
+            res.status(401).json({status:"error", message: "User with this email already created"})
         }
     } catch (e) {
         next(e)
@@ -47,16 +46,16 @@ router.post('/login', async (req, res, next) => {
         }
 
         if(!checkUser) {
-            return res.status(401).json({message: 'Email or password is incorrect'})
+            return res.status(401).json({status: 'error', message: 'Email or password is incorrect'})
         }
 
         const match = await bcrypt.compare(pwd, answer[0].password);
 
         if(match) {
             const token = jwt.sign({id: answer[0].id, role: answer[0].role}, config.get("keyjwt"))
-            res.status(200).json({id: answer[0].id, role: answer[0].role, token})
+            res.status(200).json({name: answer[0].name, role: answer[0].role, token, status: "success", message:"You are logged in"})
         } else {
-            return res.status(401).json({ss: "error", msg: 'Email or password is incorrect'})
+            return res.status(401).json({status: "error", message: 'Email or password is incorrect'})
         }
 
     } catch (e) {
