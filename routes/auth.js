@@ -53,7 +53,7 @@ router.post('/login', async (req, res, next) => {
 
         if(match) {
             const token = jwt.sign({id: answer[0].id, role: answer[0].role}, config.get("keyjwt"))
-            res.status(200).json({name: answer[0].name, role: answer[0].role, token, status: "success", message:"You are logged in"})
+            res.status(200).json({id: answer[0].id, name: answer[0].name, role: answer[0].role, token, status: "success", message:"You are logged in"})
         } else {
             return res.status(401).json({status: "error", message: 'Email or password is incorrect'})
         }
